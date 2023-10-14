@@ -98,6 +98,10 @@ export const DraggableBox = React.memo(
     sideBarDebugger,
     childComponents = null,
   }) => {
+    // useEffect(() => {
+    //   console.log('---arpit::Parent of Box: rendered', { component, inCanvas });
+    // });
+
     const [isResizing, setResizing] = useState(false);
     const [isDragging2, setDragging] = useState(false);
     const [canDrag, setCanDrag] = useState(true);

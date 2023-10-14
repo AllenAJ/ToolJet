@@ -69,61 +69,62 @@ import { useTranslation } from 'react-i18next';
 import { useCurrentState } from '@/_stores/currentStateStore';
 import { useAppInfo } from '@/_stores/appDataStore';
 import WidgetIcon from '@/../assets/images/icons/widgets';
+import DynamicComponentRenderBox from './DynamicComponentRenderBox';
 
-const AllComponents = {
-  Button,
-  Image,
-  Text,
-  TextInput,
-  NumberInput,
-  Table,
-  TextArea,
-  Container,
-  Tabs,
-  RichTextEditor,
-  DropDown,
-  Checkbox,
-  Datepicker,
-  DaterangePicker,
-  Multiselect,
-  Modal,
-  Chart,
-  Map,
-  QrScanner,
-  ToggleSwitch,
-  RadioButton,
-  StarRating,
-  Divider,
-  FilePicker,
-  PasswordInput,
-  Calendar,
-  IFrame,
-  CodeEditor,
-  Listview,
-  Timer,
-  Statistics,
-  Pagination,
-  Tags,
-  Spinner,
-  CircularProgressBar,
-  RangeSlider,
-  Timeline,
-  SvgImage,
-  Html,
-  ButtonGroup,
-  CustomComponent,
-  VerticalDivider,
-  PDF,
-  ColorPicker,
-  KanbanBoard,
-  Kanban,
-  Steps,
-  TreeSelect,
-  Link,
-  Icon,
-  Form,
-  BoundedBox,
-};
+// const AllComponents = {
+//   Button,
+//   Image,
+//   Text,
+//   TextInput,
+//   NumberInput,
+//   Table,
+//   TextArea,
+//   Container,
+//   Tabs,
+//   RichTextEditor,
+//   DropDown,
+//   Checkbox,
+//   Datepicker,
+//   DaterangePicker,
+//   Multiselect,
+//   Modal,
+//   Chart,
+//   Map,
+//   QrScanner,
+//   ToggleSwitch,
+//   RadioButton,
+//   StarRating,
+//   Divider,
+//   FilePicker,
+//   PasswordInput,
+//   Calendar,
+//   IFrame,
+//   CodeEditor,
+//   Listview,
+//   Timer,
+//   Statistics,
+//   Pagination,
+//   Tags,
+//   Spinner,
+//   CircularProgressBar,
+//   RangeSlider,
+//   Timeline,
+//   SvgImage,
+//   Html,
+//   ButtonGroup,
+//   CustomComponent,
+//   VerticalDivider,
+//   PDF,
+//   ColorPicker,
+//   KanbanBoard,
+//   Kanban,
+//   Steps,
+//   TreeSelect,
+//   Link,
+//   Icon,
+//   Form,
+//   BoundedBox,
+// };
 
 export const Box = memo(
   ({
@@ -171,7 +172,7 @@ export const Box = memo(
       return componentTypes.find((comp) => component.component === comp.component);
     }, [component]);
 
-    const ComponentToRender = AllComponents[component.component];
+    // const ComponentToRender = AllComponents[component.component];
     const [renderCount, setRenderCount] = useState(0);
     const [renderStartTime, setRenderStartTime] = useState(new Date());
     const [resetComponent, setResetStatus] = useState(false);
@@ -302,45 +303,43 @@ export const Box = memo(
           role={preview ? 'BoxPreview' : 'Box'}
         >
           {inCanvas ? (
-            !resetComponent ? (
-              <ComponentToRender
-                onComponentClick={onComponentClick}
-                onComponentOptionChanged={onComponentOptionChanged}
-                currentState={currentState}
-                onEvent={onEvent}
-                id={id}
-                paramUpdated={paramUpdated}
-                width={width}
-                changeCanDrag={changeCanDrag}
-                onComponentOptionsChanged={onComponentOptionsChanged}
-                height={height}
-                component={component}
-                containerProps={containerProps}
-                darkMode={darkMode}
-                removeComponent={removeComponent}
-                canvasWidth={canvasWidth}
-                properties={validatedProperties}
-                exposedVariables={exposedVariables}
-                styles={{ ...validatedStyles, boxShadow: validatedGeneralStyles?.boxShadow }}
-                setExposedVariable={(variable, value) => onComponentOptionChanged(component, variable, value, id)}
-                setExposedVariables={(variableSet) => onComponentOptionsChanged(component, Object.entries(variableSet))}
-                fireEvent={fireEvent}
-                validate={validate}
-                parentId={parentId}
-                customResolvables={customResolvables}
-                variablesExposedForPreview={variablesExposedForPreview}
-                exposeToCodeHinter={exposeToCodeHinter}
-                setProperty={(property, value) => {
-                  paramUpdated(id, property, { value });
-                }}
-                mode={mode}
-                resetComponent={() => setResetStatus(true)}
-                childComponents={childComponents}
-                dataCy={`draggable-widget-${String(component.name).toLowerCase()}`}
-              ></ComponentToRender>
-            ) : (
-              <></>
-            )
+            <DynamicComponentRenderBox
+              shoudRender={inCanvas && !resetComponent}
+              componentType={component.component}
+              onComponentClick={onComponentClick}
+              onComponentOptionChanged={onComponentOptionChanged}
+              currentState={currentState}
+              onEvent={onEvent}
+              id={id}
+              paramUpdated={paramUpdated}
+              width={width}
+              changeCanDrag={changeCanDrag}
+              onComponentOptionsChanged={onComponentOptionsChanged}
+              height={height}
+              component={component}
+              containerProps={containerProps}
+              darkMode={darkMode}
+              removeComponent={removeComponent}
+              canvasWidth={canvasWidth}
+              properties={validatedProperties}
+              exposedVariables={exposedVariables}
+              styles={{ ...validatedStyles, boxShadow: validatedGeneralStyles?.boxShadow }}
+              setExposedVariable={(variable, value) => onComponentOptionChanged(component, variable, value, id)}
+              setExposedVariables={(variableSet) => onComponentOptionsChanged(component, Object.entries(variableSet))}
+              fireEvent={fireEvent}
+              validate={validate}
+              parentId={parentId}
+              customResolvables={customResolvables}
+              variablesExposedForPreview={variablesExposedForPreview}
+              exposeToCodeHinter={exposeToCodeHinter}
+              setProperty={(property, value) => {
+                paramUpdated(id, property, { value });
+              }}
+              mode={mode}
+              resetComponent={() => setResetStatus(true)}
+              childComponents={childComponents}
+              dataCy={`draggable-widget-${String(component.name).toLowerCase()}`}
+            />
           ) : (
             <div className="component-image-wrapper" style={{ height: '56px', width: '72px' }}>
               <div

@@ -11,6 +11,18 @@ export const Button = function Button(props) {
   const [visibility, setVisibility] = useState(styles.visibility);
   const [loading, setLoading] = useState(properties.loadingState);
 
+  const ButtonRenderCountRef = React.useRef(0);
+
+  useEffect(() => {
+    ButtonRenderCountRef.current = ButtonRenderCountRef.current + 1;
+    console.log('--arpit:  ButtonRenderCountRef', ButtonRenderCountRef.current);
+
+    () => {
+      console.log('--arpit:  ButtonRenderCountRef unmount');
+      ButtonRenderCountRef.current = 0;
+    };
+  });
+
   useEffect(() => {
     setLabel(properties.text);
     setExposedVariable('buttonText', properties.text);
