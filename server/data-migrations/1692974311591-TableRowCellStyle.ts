@@ -10,14 +10,14 @@ export class TableRowCellStyle1692974311591 implements MigrationInterface {
     const appVersions = await appVersionRepository.find();
 
     for (const version of appVersions) {
-      const definition = version['definition'];
+      const definition = JSON.parse(JSON.stringify(version?.definition));
 
       if (definition) {
         const pages = definition['pages'];
-        if (pages) {
+        if (Object.keys(pages).length > 0) {
           for (const pageId of Object.keys(pages)) {
             const components = pages[pageId]['components'];
-            if (components) {
+            if (Object.keys(components).length > 0) {
               for (const componentId of Object.keys(components)) {
                 const component = components[componentId];
                 if (component?.component?.component === 'Table') {
@@ -32,23 +32,11 @@ export class TableRowCellStyle1692974311591 implements MigrationInterface {
                       { name: 'Striped', value: 'table-striped' },
                     ],
                   };
-                  components[componentId] = {
-                    ...component,
-                    component: {
-                      ...component.component,
-                      definition: {
-                        ...component.component.definition,
-                      },
-                    },
-                  };
                 }
               }
             }
-            pages[pageId]['components'] = components;
           }
         }
-
-        definition['pages'] = pages;
 
         version.definition = definition;
 
