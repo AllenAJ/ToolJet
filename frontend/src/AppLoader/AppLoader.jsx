@@ -20,13 +20,15 @@ const AppLoaderComponent = React.memo((props) => {
   }, []);
 
   const loadAppDetails = (appId) => {
-    appService.fetchApp(appId, 'edit').then((data) => {
-      setShouldLoadApp(true);
-      updateState({
-        app: data,
-        appId: data.id,
-      });
-    });
+    appService
+      .fetchApp(appId, 'edit')
+      .then((data) => {
+        updateState({
+          app: data,
+          appId: data.id,
+        });
+      })
+      .finally(() => setShouldLoadApp(true));
   };
 
   if (!shouldLoadApp) return <></>;

@@ -103,7 +103,9 @@ export const PrivateRoute = ({ children }) => {
       );
     }
 
-    return <TJLoader />;
+    if (!pathname.startsWith('/apps/')) {
+      return <TJLoader />;
+    }
   }
 };
 

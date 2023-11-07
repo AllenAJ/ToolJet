@@ -66,6 +66,7 @@ import { useMounted } from '@/_hooks/use-mount';
 import { diff } from 'deep-object-diff';
 
 import useDebouncedArrowKeyPress from '@/_hooks/useDebouncedArrowKeyPress';
+import { TJLoader } from '@/_ui/TJLoader';
 
 setAutoFreeze(false);
 enablePatches();
@@ -1691,29 +1692,7 @@ const EditorComponent = (props) => {
   };
 
   if (isLoading) {
-    return (
-      <div className="apploader">
-        <div className="col col-* editor-center-wrapper">
-          <div className="editor-center">
-            <div className="canvas">
-              <div className="mt-5 d-flex flex-column">
-                <div className="mb-1">
-                  <Skeleton width={'150px'} height={15} className="skeleton" />
-                </div>
-                {Array.from(Array(4)).map((_item, index) => (
-                  <Skeleton key={index} width={'300px'} height={10} className="skeleton" />
-                ))}
-                <div className="align-self-end">
-                  <Skeleton width={'100px'} className="skeleton" />
-                </div>
-                <Skeleton className="skeleton mt-4" />
-                <Skeleton height={'150px'} className="skeleton mt-2" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+    return <TJLoader />;
   }
 
   //! Need to move conditionally rendered components to separate components => Widget Manger or Widget Inspector
