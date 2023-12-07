@@ -2358,7 +2358,7 @@ export const widgets = [
         letterSpacing: { value: 0 },
         wordSpacing: { value: 0 },
         fontVariant: { value: 'normal' },
-        verticalAlignment: { value: 'center' },
+        verticalAlignment: { value: 'top' },
         margin: { value: 'default' },
         boxShadow: { value: '0px 0px 0px 0px #00000090' },
         borderColor: { value: '#E6E8EB' },
