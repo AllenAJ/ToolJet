@@ -2313,7 +2313,7 @@ export const widgets = [
           { displayName: 'None', value: 'none' },
           { displayName: 'Default', value: 'default' },
         ],
-        accordian: 'General',
+        accordian: 'Container',
       },
     },
     exposedVariables: {
