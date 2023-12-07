@@ -13,4 +13,7 @@ export const TypeMapping = {
   checkbox: 'Checkbox',
   slider: 'Slider',
   switch: 'Switch',
+  input: 'Input',
+  icon: 'Icon',
+  visibility: 'Visibility',
 };

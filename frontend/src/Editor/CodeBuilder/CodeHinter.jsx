@@ -38,6 +38,9 @@ import ClientServerSwitch from './Elements/ClientServerSwitch';
 import Switch from './Elements/Switch';
 import Checkbox from './Elements/Checkbox';
 import Slider from './Elements/Slider';
+import { Input } from './Elements/Input';
+import { Icon } from './Elements/Icon';
+import { Visibility } from './Elements/Visibility';
 
 const HIDDEN_CODE_HINTER_LABELS = ['Table data', 'Column data', 'Text Format'];
 
@@ -52,12 +55,16 @@ const AllElements = {
   ClientServerSwitch,
   Slider,
   Switch,
+  Input,
   Checkbox,
+  Icon,
+  Visibility,
 };
 
 export function CodeHinter({
   initialValue,
   onChange,
+  onVisibilityChange,
   mode,
   theme,
   lineNumbers,
@@ -85,6 +92,7 @@ export function CodeHinter({
   currentState: _currentState,
   verticalLine = true,
   isIcon = false,
+  paramUpdated,
 }) {
   const darkMode = localStorage.getItem('darkMode') === 'true';
   const options = {
@@ -100,7 +108,7 @@ export function CodeHinter({
   };
   const currentState = useCurrentState();
   const [realState, setRealState] = useState(currentState);
-  const [currentValue, setCurrentValue] = useState(initialValue);
+  const [currentValue, setCurrentValue] = useState('');
 
   const [prevCurrentValue, setPrevCurrentValue] = useState(null);
   const [resolvedValue, setResolvedValue] = useState(null);
@@ -128,13 +136,24 @@ export function CodeHinter({
   const prevCountRef = useRef(false);
 
   useEffect(() => {
+    setCurrentValue(initialValue);
+
+    return () => {
+      setPrevCurrentValue(null);
+      setResolvedValue(null);
+      setResolvingError(null);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
     if (_currentState) {
       setRealState(_currentState);
     } else {
       setRealState(currentState);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentState.components, _currentState]);
+  }, [JSON.stringify({ currentState, _currentState })]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -156,7 +175,7 @@ export function CodeHinter({
   }, [wrapperRef, isFocused, isPreviewFocused, currentValue, prevCountRef, isOpen]);
 
   useEffect(() => {
-    if (JSON.stringify(currentValue) !== JSON.stringify(prevCurrentValue)) {
+    if (enablePreview && isFocused && JSON.stringify(currentValue) !== JSON.stringify(prevCurrentValue)) {
       const customResolvables = getCustomResolvables();
       const [preview, error] = resolveReferences(currentValue, realState, null, customResolvables, true, true);
       setPrevCurrentValue(currentValue);
@@ -169,13 +188,8 @@ export function CodeHinter({
         setResolvedValue(preview);
       }
     }
-
-    return () => {
-      setPrevCurrentValue(null);
-      setResolvedValue(null);
-      setResolvingError(null);
-    };
-  }, [JSON.stringify({ currentValue, realState })]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify({ currentValue, realState, isFocused })]);
 
   function valueChanged(editor, onChange, ignoreBraces) {
     if (editor.getValue()?.trim() !== currentValue) {
@@ -378,6 +392,12 @@ export function CodeHinter({
                     setCurrentValue(value);
                   }
                 }}
+                onVisibilityChange={(value) => {
+                  if (value !== currentValue) {
+                    onVisibilityChange(value);
+                    setCurrentValue(value);
+                  }
+                }}
                 paramName={paramName}
                 paramLabel={paramLabel}
                 forceCodeBox={() => {
@@ -386,7 +406,6 @@ export function CodeHinter({
                 }}
                 meta={fieldMeta}
                 cyLabel={cyLabel}
-                // {...(component.component == 'TextInput' && { component: component })}
                 isIcon={isIcon}
                 component={component}
               />
@@ -400,7 +419,7 @@ export function CodeHinter({
       >
         <div className={`col code-hinter-col`}>
           <div className="d-flex">
-            <div className={`${verticalLine && 'code-hinter-vertical-line'}`}></div>
+            {/* <div className={`${verticalLine && 'code-hinter-vertical-line'}`}></div> */}
             <div className="code-hinter-wrapper position-relative" style={{ width: '100%' }}>
               <div
                 className={`${defaultClassName} ${className || 'codehinter-default-input'}`}

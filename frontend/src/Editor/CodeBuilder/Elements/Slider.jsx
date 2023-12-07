@@ -10,11 +10,12 @@ function Slider1({ value, onChange, component }) {
   };
   const onInputChange = (e) => {
     setSliderValue(e.target.value);
-    onChange(`{{${e.target.value}}}`);
+    if (e.target.value > 100) onChange(`{{${100}}}`);
+    else onChange(`{{${e.target.value}}}`);
   };
 
   return (
-    <div className="d-flex flex-column">
+    <div className="d-flex flex-column" style={{ width: '142px' }}>
       <CustomInput
         disabled={component.component.definition.styles.auto.value == true}
         value={sliderValue}

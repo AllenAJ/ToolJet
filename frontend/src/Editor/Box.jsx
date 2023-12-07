@@ -67,6 +67,7 @@ import _ from 'lodash';
 import { EditorContext } from '@/Editor/Context/EditorContextWrapper';
 import { useTranslation } from 'react-i18next';
 import { useCurrentState } from '@/_stores/currentStateStore';
+import { useAppInfo } from '@/_stores/appDataStore';
 import WidgetIcon from '@/../assets/images/icons/widgets';
 
 const AllComponents = {
@@ -148,11 +149,11 @@ export const Box = memo(
     sideBarDebugger,
     readOnly,
     childComponents,
+    isResizing,
   }) => {
     const { t } = useTranslation();
     const backgroundColor = yellow ? 'yellow' : '';
     const currentState = useCurrentState();
-
     let styles = {
       height: '100%',
       padding: '1px',
@@ -163,6 +164,8 @@ export const Box = memo(
         ...styles,
       };
     }
+
+    const { events } = useAppInfo();
 
     const componentMeta = useMemo(() => {
       return componentTypes.find((comp) => component.component === comp.component);
@@ -265,7 +268,10 @@ export const Box = memo(
       if (mode === 'edit' && eventName === 'onClick') {
         onComponentClick(id, component);
       }
-      onEvent(eventName, { ...options, customVariables: { ...customResolvables }, component });
+
+      const componentEvents = events.filter((event) => event.sourceId === id);
+
+      onEvent(eventName, componentEvents, { ...options, customVariables: { ...customResolvables } });
     };
     const validate = (value) =>
       validateWidget({
@@ -273,6 +279,7 @@ export const Box = memo(
         ...{ validationObject: component.definition.validation, currentState },
         customResolveObjects: customResolvables,
       });
+    const shouldAddBoxShadow = ['TextInput'];
 
     const componentStyles = useMemo(() => {
       if (component.component === 'Text') {
@@ -326,7 +333,12 @@ export const Box = memo(
                 canvasWidth={canvasWidth}
                 properties={validatedProperties}
                 exposedVariables={exposedVariables}
-                styles={componentStyles}
+                styles={{
+                  ...validatedStyles,
+                  ...(!shouldAddBoxShadow.includes(component.component)
+                    ? { boxShadow: validatedGeneralStyles?.boxShadow }
+                    : {}),
+                }}
                 setExposedVariable={(variable, value) => onComponentOptionChanged(component, variable, value, id)}
                 setExposedVariables={(variableSet) => onComponentOptionsChanged(component, Object.entries(variableSet))}
                 fireEvent={fireEvent}
@@ -342,6 +354,7 @@ export const Box = memo(
                 resetComponent={() => setResetStatus(true)}
                 childComponents={childComponents}
                 dataCy={`draggable-widget-${String(component.name).toLowerCase()}`}
+                isResizing={isResizing}
               ></ComponentToRender>
             ) : (
               <></>
