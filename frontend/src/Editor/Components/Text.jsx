@@ -99,7 +99,7 @@ export const Text = function Text({ height, properties, fireEvent, styles, darkM
   };
 
   const computedStyles = {
-    height: padding === 'default' ? `calc(${height}px - 5px)` : height,
+    height: `${height}px`,
     backgroundColor,
     color,
     display: visibility ? 'flex' : 'none',
