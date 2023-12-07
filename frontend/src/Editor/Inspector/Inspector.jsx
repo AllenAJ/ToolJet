@@ -77,7 +77,7 @@ export const Inspector = ({
   const [inputRef, setInputFocus] = useFocus();
   // const [selectedTab, setSelectedTab] = useState('properties');
   const [showHeaderActionsMenu, setShowHeaderActionsMenu] = useState(false);
-  const shouldAddBoxShadow = ['TextInput'];
+  const shouldAddBoxShadow = ['TextInput', 'Text'];
 
   const { isVersionReleased } = useAppVersionStore(
     (state) => ({
