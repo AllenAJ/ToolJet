@@ -2305,15 +2305,15 @@ export const widgets = [
         validation: { schema: { type: 'union', schemas: [{ type: 'string' }, { type: 'number' }] } },
         accordian: 'Container',
       },
-      margin: {
+      padding: {
         type: 'switch',
-        displayName: 'Margin',
+        displayName: 'Padding',
         validation: { schema: { type: 'string' } },
         options: [
           { displayName: 'None', value: 'none' },
           { displayName: 'Default', value: 'default' },
         ],
-        accordian: 'Container',
+        accordian: 'General',
       },
     },
     exposedVariables: {
@@ -2359,7 +2359,7 @@ export const widgets = [
         wordSpacing: { value: 0 },
         fontVariant: { value: 'normal' },
         verticalAlignment: { value: 'top' },
-        margin: { value: 'default' },
+        padding: { value: 'default' },
         boxShadow: { value: '0px 0px 0px 0px #00000090' },
         borderColor: { value: '#E6E8EB' },
         borderRadius: { value: '' },
